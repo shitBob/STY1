@@ -1,10 +1,10 @@
 <template>
   测试界面
   <van-collapse v-model="activeNames" accordion v-for="(item, index) in memberStore.profile.profession">
-  <van-collapse-item  v-if="item>0" :title="num_to_profession(index+1)" :name="index+1">
+  <van-collapse-item  v-if="item>0" :title="num_to_profession(index)" :name="index">
     <van-cell title="考试次数:" > </van-cell>
     <van-cell title="优秀次数:">  </van-cell>  
-    <van-button @click="start_exam(index+1)" type="primary" style="margin-top: 10px;margin-left: 80px;">开始考试</van-button>
+    <van-button @click="start_exam(index)" type="primary" style="margin-top: 10px;margin-left: 80px;">开始考试</van-button>
   </van-collapse-item>
  
 </van-collapse>
@@ -34,13 +34,13 @@ const activeNames = ref('1');
 const questionListStore = useQuestionListStore();
 const questionInfoStore = useQuestionInfoStore();
   const num_to_profession = (index:any) => {
-  if (index === 1) {
+  if (index === 0) {
     return '低压';
-  } else if (index === 2) {
+  } else if (index === 1) {
     return '高压';
-  } else if (index === 3) {
+  } else if (index === 2) {
     return '高处';
-  } else if (index === 4) {
+  } else if (index === 3) {
     return '焊工';
   }
 
@@ -63,6 +63,8 @@ const start_exam = (index:any) => {
         res.data.data.exam_questionlist[i].questionPicture,
         res.data.data.exam_questionlist[i].optionDescription,
         res.data.data.exam_questionlist[i].cAnswer,
+        res.data.data.exam_questionlist[i].flag,
+        res.data.data.exam_questionlist[i].questionContain
       )
     }
     router.push({name:'exam',params:{id:memberStore.profile.id,
