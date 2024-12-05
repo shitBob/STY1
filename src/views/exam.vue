@@ -37,24 +37,73 @@
     <van-icon name="cross" size="40"  color="red" v-else="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]!== checked.join('')" />
     </template>
     
+    <ul v-for="(value,key) in questionInfoStore.questionInfo.question_options[Number($route.params.quesion_index)-1]">
+    <li >{{key}}: {{value}}</li>
+    </ul>
+
     <van-divider>题目描述</van-divider>
-    
     
     <van-image :src="questionInfoStore.questionInfo.question_pic[Number($route.params.quesion_index)-1]" fit="scale-down" preview  @click="showImagePreview1"
       style="width: 80%;height: 200px;margin-bottom: 10px;" />
     <van-divider>图片演示，可以点击查看大图</van-divider>
+    <template v-if="questionInfoStore.questionInfo.question_contain[Number($route.params.quesion_index)-1]==false">
+   
     
-    <van-checkbox-group v-if="route.path.includes('profession')" v-model="checked" :max="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1].length>1?4:1"
-      :disabled="questionInfoStore.questionInfo.quesion_summit[Number($route.params.quesion_index)-1]">
-      <van-checkbox name="a" style="margin-top: 5px ;
-        margin-bottom: 10px ;" >A:   {{questionInfoStore.questionInfo.question_options[Number($route.params.quesion_index)-1].a}}</van-checkbox>
-      <van-checkbox name="b" style="margin-top: 5px ;
-        margin-bottom: 10px ;">B:   {{questionInfoStore.questionInfo.question_options[Number($route.params.quesion_index)-1].b}}</van-checkbox>
-      <van-checkbox name="c" style="margin-top: 5px ;
-        margin-bottom: 10px ;">C:   {{questionInfoStore.questionInfo.question_options[Number($route.params.quesion_index)-1].c}}</van-checkbox>
-      <van-checkbox name="d" style="margin-top: 10px ;
-        margin-bottom: 5px ;">D:   {{questionInfoStore.questionInfo.question_options[Number($route.params.quesion_index)-1].d}}</van-checkbox>
+    <van-checkbox-group v-if="route.path.includes('profession')" v-model="checked" 
+    :max="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1].length>1?4:1"
+      :disabled="questionInfoStore.questionInfo.quesion_summit[Number($route.params.quesion_index)-1]"
+      style=" display: flex;
+       flex-direction: row; 
+       width: 300px;
+         "
+       >
+      <van-checkbox v-for="(value,key,index) in questionInfoStore.questionInfo.question_options[Number($route.params.quesion_index)-1]"
+      :name="key"
+      style="flex:1"
+       label-position="left" icon-size="24px" 
+        >
+         <template #icon="props">
+    <img  style=" height: 20px;" 
+      :src="checked.indexOf(key)!== -1? letteractive[index] : letterurldefalut[index]" />
+       </template>
+
+
+        </van-checkbox>
     </van-checkbox-group>
+    </template>
+
+    <template v-else>
+   <p style="font-weight: bold;">  <b>该题目包含多个问题,请以此填入答案选项：</b></p>
+     <template v-for="(Index) in questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1].length">
+     <span style="font-weight: bold;"> 问题{{Index}}</span>: <br>
+     <van-checkbox-group v-if="route.path.includes('profession')"
+      v-model="checked_mul[Index].value" 
+     :max="1"
+      :disabled="questionInfoStore.questionInfo.quesion_summit[Number($route.params.quesion_index)-1]"
+      style=" display: flex;
+       flex-direction: row; 
+       width: 300px;
+       margin-bottom: 10px;
+         "
+       >
+      <van-checkbox v-for="(value,key,index) in questionInfoStore.questionInfo.question_options[Number($route.params.quesion_index)-1]"
+      :name="key"
+      style="flex:1"
+       label-position="left" icon-size="24px" 
+        >
+         <template #icon="props">
+    <img  style=" height: 20px;" 
+      :src="checked_mul[Index].value.indexOf(key)!== -1? letteractive[index] : letterurldefalut[index]" />
+       </template>
+    </van-checkbox>
+    </van-checkbox-group>
+
+
+     </template>
+     
+     </template>
+
+     
     
     
     <template v-if="questionInfoStore.questionInfo.quesion_summit[Number($route.params.quesion_index)-1]">
@@ -73,6 +122,8 @@
            @click="handin">提交本题
            </van-button>
 
+           
+
 
            <van-button v-if="questionInfoStore.questionInfo.quesion_summit[Number($route.params.quesion_index)-1]==true && currentPage== pagecount" 
     type="primary" 
@@ -87,8 +138,6 @@
     next-text="下一题" @change="onChange"
      style="opacity: 0.8 " />
     </div>
-    
-    
     
     
       </template>
@@ -109,6 +158,11 @@
       const memberStore = useMemberStore()
       const checked = ref([] as string[]);
       const time = ref(60*60*24*3*1000) // 3天
+
+      const checked_mul = ref([ ref([] as string[]), ref([] as string[]),
+      ref([] as string[]),
+      ref([] as string[])] );
+      
 
       const onClickLeft = () => {
         //questionInfoStore.reset()
@@ -149,8 +203,6 @@
     
     
     
-    //console.log(questionInfoStore.questionInfo)
-    
     
     const showImagePreview1 = () => {
       showImagePreview({
@@ -189,7 +241,17 @@
        })
 
      }
-    
+    const letterurldefalut=[] as string[]
+    const letteractive=[] as string[]
+     for (let i=0;i<8;i++)
+     {
+      let result = String.fromCharCode(i + 65)
+      letterurldefalut[i]="/user/src/icon/"+ result+"_round.png"
+      letteractive[i]="/user/src/icon/"+ result+"_round_solid.png"
+     }
+     console.log(letterurldefalut[0])
+
+
   
       </script>
       

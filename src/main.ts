@@ -5,7 +5,7 @@ import App from './App.vue'
 import router from './router'
 import { Button,Cell, CellGroup ,Form, Field, Tabbar, TabbarItem,Collapse, CollapseItem,Tag
     ,NavBar,Pagination,Divider,Checkbox, CheckboxGroup,Image as VanImage,ImagePreview,Highlight,Icon,
-    CountDown
+    CountDown,Grid, GridItem
 
 } from 'vant';
 import piniaPersistedstate from 'pinia-plugin-persistedstate';
@@ -13,6 +13,8 @@ import 'vant/lib/index.css';
 import axios from 'axios';
 const app = createApp(App)
 
+app.use(Grid)
+app.use(GridItem)
 app.use(CountDown)
 app.use(Highlight)
 app.use(Button);

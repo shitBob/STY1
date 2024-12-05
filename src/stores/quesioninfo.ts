@@ -28,12 +28,37 @@ export const useQuestionInfoStore = defineStore('questionInfo', () => {
   }
   const setonequesion = (i: number, content: string,
      pic: string, 
-     options: {},
+     options: string,
     answer: string,mlt:boolean,NUM:boolean) => {
     questionInfo.question_content[i] = content
     questionInfo.question_pic[i] = pic
-    questionInfo.question_options[i] = options
+    
+
+    let result: { [key: string]: string } = {};
+    let currentKey = "";
+    for (let i = 0; i < options.length; i++) {
+      if (i !== options.length - 1)  
+      {
+        if (options[i].match(/[A-Z]/) && options[i+1]===".") {
+          currentKey = options[i];
+          result[currentKey] = "";
+      } else if (options[i]!==".") {
+          result[currentKey] += options[i];
+      }
+      }
+      else {
+        result[currentKey] += options[i];
+      }
+    }
+
+
+
+
+    questionInfo.question_options[i] = result
+    
     questionInfo.question_answer[i] = answer
+    console.log(questionInfo.question_answer[i])
+    console.log(answer)
     questionInfo.quesion_get[i] = true
     questionInfo.question_multi[i] = mlt
     questionInfo.question_contain[i] = NUM

@@ -54,24 +54,24 @@ const start_exam = (index:any) => {
     userId:memberStore.profile.id,
   }).then(res => { 
     if (res.data.code == 200) {
-      questionInfoStore.questionInfoInit(res.data.data.question_Num)
-    //  console.log(res.data.data.question_Num)
-      for (let i=0;i<res.data.data.question_Num;i++)
+      //questionInfoStore.questionInfoInit(res.data.data.questionNum)
+    //  console.log(res)
+      for (let i=0;i<res.data.data.questionNum;i++)
     {
      
       questionInfoStore.setonequesion(i,res.data.data.exam_questionlist[i].questionScript,
         res.data.data.exam_questionlist[i].questionPicture,
-        res.data.data.exam_questionlist[i].optionDescription,
-        res.data.data.exam_questionlist[i].cAnswer,
-        res.data.data.exam_questionlist[i].flag,
-        res.data.data.exam_questionlist[i].questionContain
+        res.data.data.exam_questionlist[i].option,
+        res.data.data.exam_questionlist[i].canswer,
+        res.data.data.exam_questionlist[i].flagMul,
+        res.data.data.exam_questionlist[i].flagContain
       )
     }
     router.push({name:'exam',params:{id:memberStore.profile.id,
     profession:index,
     exam_id:1,
     quesion_index:1,
-    quesion_num:res.data.data.question_Num}});
+    quesion_num:res.data.data.questionNum}});
     
     }
     else {
