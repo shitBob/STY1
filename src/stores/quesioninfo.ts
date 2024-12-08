@@ -69,11 +69,6 @@ export const useQuestionInfoStore = defineStore('questionInfo', () => {
     questionInfo.quesion_summit[i] = true
   }
   const reset = () => {
-    questionInfo.question_num = 0
-    questionInfo.question_content = []
-    questionInfo.question_pic = []
-    questionInfo.question_answer = []
-    questionInfo.question_options = []
     questionInfo.quesion_summit = []
     questionInfo.quesion_get = []
     questionInfo.question_mem_answer = []

@@ -106,11 +106,18 @@
      
     
     
-    <template v-if="questionInfoStore.questionInfo.quesion_summit[Number($route.params.quesion_index)-1]">
+    <template v-if="questionInfoStore.questionInfo.quesion_summit[Number($route.params.quesion_index)-1] && questionInfoStore.questionInfo.question_contain[Number($route.params.quesion_index)-1]==false" >
       正确答案：<span style="color: green;font-weight: bold;">{{questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]}}</span>  <br>
       选择的答案：<span v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]=== checked.join('')" style="color: green;font-weight: bold;">{{checked.join('')}}</span>
       <span v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]!== checked.join('')" style="color: red;font-weight: bold;">{{checked.join('')}}</span>  <br> 
     
+    </template>
+    <template v-if="questionInfoStore.questionInfo.quesion_summit[Number($route.params.quesion_index)-1] && questionInfoStore.questionInfo.question_contain[Number($route.params.quesion_index)-1]==true" >
+      正确答案：<span style="color: green;font-weight: bold;">{{questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]}}</span>  <br>
+      选择的答案：<span v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]=== questionInfoStore.questionInfo.question_mem_answer[Number($route.params.quesion_index)-1]" style="color: green;font-weight: bold;">
+        {{questionInfoStore.questionInfo.question_mem_answer[Number(route.params.quesion_index)-1]}}</span>
+      <span v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]!== checked.join('')" style="color: red;font-weight: bold;">
+        {{questionInfoStore.questionInfo.question_mem_answer[Number(route.params.quesion_index)-1]}}</span>  <br> 
     </template>
     
     
@@ -152,6 +159,22 @@
       import { useQuestionInfoStore } from "@/stores/quesioninfo"
       import { instance } from "@/instance"
       import { showImagePreview } from 'vant';
+      import A from "@/icon/A_round.png"
+      import B from "@/icon/B_round.png"
+      import C from "@/icon/C_round.png"
+      import D from "@/icon/D_round.png"  
+      import E from "@/icon/E_round.png"
+      import F from "@/icon/F_round.png"
+      import G from "@/icon/G_round.png"
+      import H from "@/icon/H_round.png"
+      import A_active from "@/icon/A_round_solid.png"
+      import B_active from "@/icon/B_round_solid.png"
+      import C_active from "@/icon/C_round_solid.png"
+      import D_active from "@/icon/D_round_solid.png"  
+      import E_active from "@/icon/E_round_solid.png"
+      import F_active from "@/icon/F_round_solid.png"
+      import G_active from "@/icon/G_round_solid.png"
+      import H_active from "@/icon/H_round_solid.png" 
       const questionInfoStore = useQuestionInfoStore()
       const route = useRoute()
       const router = useRouter()
@@ -161,11 +184,11 @@
 
       const checked_mul = ref([ ref([] as string[]), ref([] as string[]),
       ref([] as string[]),
-      ref([] as string[])] );
+      ref([] as string[]),ref([] as string[])] );
       
 
       const onClickLeft = () => {
-        //questionInfoStore.reset()
+       
         router.push({name:'examshow',params:{id:memberStore.profile.id}})
         
       }
@@ -216,7 +239,16 @@
     const handin = () =>
      {
       questionInfoStore.questionInfo.quesion_summit[Number(route.params.quesion_index)-1]=true
+      if(questionInfoStore.questionInfo.question_contain[Number(route.params.quesion_index)-1]==false)
       questionInfoStore.questionInfo.question_mem_answer[Number(route.params.quesion_index)-1]=checked.value.sort().join("")
+      else{
+        for (let i=1;i<=questionInfoStore.questionInfo.question_answer[Number(route.params.quesion_index)-1].length;i++){
+          questionInfoStore.questionInfo.question_mem_answer[Number(route.params.quesion_index)-1]+=checked_mul.value[i].value.join("")
+          console.log(questionInfoStore.questionInfo.question_mem_answer[Number(route.params.quesion_index)-1])
+        }
+      }
+
+      
      }
      const handin_exam = () =>
      {
@@ -243,13 +275,23 @@
      }
     const letterurldefalut=[] as string[]
     const letteractive=[] as string[]
-     for (let i=0;i<8;i++)
-     {
-      let result = String.fromCharCode(i + 65)
-      letterurldefalut[i]="/user/src/icon/"+ result+"_round.png"
-      letteractive[i]="/user/src/icon/"+ result+"_round_solid.png"
-     }
-     console.log(letterurldefalut[0])
+    letterurldefalut[0]=A;
+    letteractive[0]=A_active;
+    letterurldefalut[1]=B;
+    letteractive[1]=B_active;
+    letterurldefalut[2]=C;
+    letteractive[2]=C_active;
+    letterurldefalut[3]=D;
+    letteractive[3]=D_active;
+    letterurldefalut[4]=E;
+    letteractive[4]=E_active;
+    letterurldefalut[5]=F;
+    letteractive[5]=F_active;
+    letterurldefalut[6]=G;
+    letteractive[6]=G_active;
+    letterurldefalut[7]=H;
+    letteractive[7]=H_active;
+   
 
 
   

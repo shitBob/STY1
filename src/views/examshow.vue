@@ -54,7 +54,7 @@ const start_exam = (index:any) => {
     userId:memberStore.profile.id,
   }).then(res => { 
     if (res.data.code == 200) {
-      //questionInfoStore.questionInfoInit(res.data.data.questionNum)
+    questionInfoStore.questionInfoInit(res.data.data.questionNum)
     //  console.log(res)
       for (let i=0;i<res.data.data.questionNum;i++)
     {
@@ -67,6 +67,7 @@ const start_exam = (index:any) => {
         res.data.data.exam_questionlist[i].flagContain
       )
     }
+
     router.push({name:'exam',params:{id:memberStore.profile.id,
     profession:index,
     exam_id:1,
