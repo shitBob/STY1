@@ -39,7 +39,9 @@ import { useMemberStore } from '@/stores/member';
 import { instance } from '@/instance';
 import { useQuestionListStore} from '@/stores/quesionlist';
 import { get_exercise_list } from '@/method/get_exercise_list';
+import {useQuestionInfoStore}  from '@/stores/quesioninfo';
 
+const questionInfoStore = useQuestionInfoStore();
 
 const num_to_profession = (index:any) => {
   if (index === 1) {
@@ -74,10 +76,6 @@ const onChange = ()=>{
   }
 }
 
-
-const gotoquesion = (profession:any,exercise_list:any,quesion_index:any)=> {
-
-}
 
 get_exercise_list();
 

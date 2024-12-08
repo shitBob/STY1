@@ -32,36 +32,32 @@ export const useQuestionInfoStore = defineStore('questionInfo', () => {
     answer: string,mlt:boolean,NUM:boolean) => {
     questionInfo.question_content[i] = content
     questionInfo.question_pic[i] = pic
-    
 
     let result: { [key: string]: string } = {};
     let currentKey = "";
-    for (let i = 0; i < options.length; i++) {
-      if (i !== options.length - 1)  
+    for (let j = 0; j < options.length; j++) {
+      if (j !== options.length - 1)  
       {
-        if (options[i].match(/[A-Z]/) && options[i+1]===".") {
-          currentKey = options[i];
+        if (options[j].match(/[A-Z]/) && options[j+1]===".") {
+          currentKey = options[j];
           result[currentKey] = "";
-      } else if (options[i]!==".") {
-          result[currentKey] += options[i];
+      } else if (options[j]!==".") {
+          result[currentKey] += options[j];
       }
       }
       else {
-        result[currentKey] += options[i];
+        result[currentKey] += options[j];
       }
     }
 
-
-
-
     questionInfo.question_options[i] = result
-    
+   
     questionInfo.question_answer[i] = answer
     console.log(questionInfo.question_answer[i])
-    console.log(answer)
     questionInfo.quesion_get[i] = true
     questionInfo.question_multi[i] = mlt
     questionInfo.question_contain[i] = NUM
+
   }
   const setanswer = (i: number, answer: string,mem_ans:string) => {
     questionInfo.question_answer[i] = answer
