@@ -68,8 +68,8 @@
             phone:res.data.data.phone,
             name:res.data.data.name,
             profession:res.data.data.profession,
-            token:res.data.token,})
-           console.log("id: ",memberStore.profile.id)
+            token:res.data.token})
+           console.log("token",memberStore.profile.token)
             goto();
           } else if (res.data.code === 401) {
             alert('该账号未注册，请和管理员联系')

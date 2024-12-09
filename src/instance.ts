@@ -9,7 +9,7 @@ const memberStore = useMemberStore();
 
     const processedUrl = processUrl(config.url);
     config.url = processedUrl;
-    config.headers['Authorization'] = memberStore.profile.token;
+    config.headers['Token'] = memberStore.profile.token;
     return config;
   }, (error:any) => {
   return Promise.reject(error);
