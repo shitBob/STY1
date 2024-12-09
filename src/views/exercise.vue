@@ -196,7 +196,8 @@
   const currentPage = ref(1) ;
 
   const onChange = () => {
-   
+    if (Number(route.params.quesion_index) < pagecount.value)
+    Getquesion(Number(route.params.quesion_index)+1);
       router.push({name: 'exercise',params: {id: memberStore.profile.id,
         profession: route.params.profession,
         list_index: route.params.list_index,
@@ -313,15 +314,11 @@ const handin = () => {
     alert("提交失败，请检查网络")
   });
   }
- 
-
+   
 }
 
-
+  Getquesion(1);
   questionInfoStore.questionInfoInit(Number(pagecount.value))
-  for(let i=1;i<=pagecount.value;i++){
-    Getquesion(i)
-  }
 
 
   

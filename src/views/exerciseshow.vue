@@ -2,7 +2,7 @@
 做题页面
 
 <van-collapse v-model="activeNames" accordion v-for="(item, index) in memberStore.profile.profession">
-  <van-collapse-item :title="num_to_profession(index+1)" :name="index+1" v-if="item!= 0">
+  <van-collapse-item :title="num_to_profession(index+1)" :name="index+1" v-if="item!= 0 &&questionListStore.questionList.questionList_status[index]!=null">
    <template v-for="list_index in Math.ceil(item % 10 == 0? item/10 : item/10 )" >
     <van-cell-group inset>
   <van-cell  value="内容"  is-link :to="{name: 'exercise',params: {id: memberStore.profile.id,profession: index+1,
