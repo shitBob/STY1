@@ -1,5 +1,5 @@
 <template>
-/* From Uiverse.io by sabbircoder07 */ 
+<!-- /* From Uiverse.io by sabbircoder07 */  -->
    <div class="results-summary-container">
       <div class="confetti">
         <div class="confetti-piece"></div>

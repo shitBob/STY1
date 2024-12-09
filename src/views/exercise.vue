@@ -319,10 +319,9 @@ const handin = () => {
 
 
   questionInfoStore.questionInfoInit(Number(pagecount.value))
-  // for(let i=1;i<=pagecount.value;i++){
-  //   Getquesion(i)
-  // }
-  Getquesion(1);
+  for(let i=1;i<=pagecount.value;i++){
+    Getquesion(i)
+  }
 
 
   
