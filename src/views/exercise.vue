@@ -196,8 +196,8 @@
   const currentPage = ref(1) ;
 
   const onChange = () => {
-    if (Number(route.params.quesion_index) < pagecount.value)
-    Getquesion(Number(route.params.quesion_index)+1);
+   if (Number(route.params.quesion_index) < pagecount.value)
+      Getquesion(Number(route.params.quesion_index)+1);
       router.push({name: 'exercise',params: {id: memberStore.profile.id,
         profession: route.params.profession,
         list_index: route.params.list_index,
@@ -317,9 +317,8 @@ const handin = () => {
    
 }
 
-  Getquesion(1);
-  questionInfoStore.questionInfoInit(Number(pagecount.value))
-
+questionInfoStore.questionInfoInit(Number(pagecount.value))
+ Getquesion(1);
 
   
 

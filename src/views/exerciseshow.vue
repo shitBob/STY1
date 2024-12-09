@@ -6,7 +6,7 @@
    <template v-for="list_index in Math.ceil(item % 10 == 0? item/10 : item/10 )" >
     <van-cell-group inset>
   <van-cell  value="内容"  is-link :to="{name: 'exercise',params: {id: memberStore.profile.id,profession: index+1,
-    list_index: list_index-1,
+    list_index: list_index,
     quesion_index:1,
     quesion_num:(item-(list_index-1)*10>=10? 10:item-(list_index-1)*10)}}">
 

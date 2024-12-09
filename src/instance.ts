@@ -10,7 +10,6 @@ const memberStore = useMemberStore();
     const processedUrl = processUrl(config.url);
     config.url = processedUrl;
     config.headers['Token'] = memberStore.profile.token;
-    console.log("Token is: ",config.headers['Token']);
     return config;
   }, (error:any) => {
   return Promise.reject(error);
