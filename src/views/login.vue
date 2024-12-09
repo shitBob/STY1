@@ -68,7 +68,7 @@
             phone:res.data.data.phone,
             name:res.data.data.name,
             profession:res.data.data.profession,
-            token:res.data.token})
+            token:res.data.data.token})
            console.log("token",memberStore.profile.token)
             goto();
           } else if (res.data.code === 401) {
