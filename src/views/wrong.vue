@@ -1,5 +1,5 @@
 <template>
-    错题界面
+    错题界面,待开发
     <van-tabbar v-model="active" @change="onChange">
       <van-tabbar-item name="exercise" icon="records-o">做题</van-tabbar-item>
       <van-tabbar-item name="exam"     icon="notes-o">测试</van-tabbar-item>

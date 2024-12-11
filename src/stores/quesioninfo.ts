@@ -26,6 +26,16 @@ export const useQuestionInfoStore = defineStore('questionInfo', () => {
     questionInfo.quesion_summit = new Array(num).fill(false)
     questionInfo.quesion_get = new Array(num).fill(false)
   }
+  function parseOptions(optionStr:string) {
+    const options: { [key: string]: string } = {};
+    const lines = optionStr.split('\n');
+    lines.forEach(line => {
+        const key = line[0];
+        const value = line.slice(1).trim();
+        options[key] = value;
+    });
+    return options;
+}
   const setonequesion = (i: number, content: string,
      pic: string, 
      options: string,
@@ -33,27 +43,11 @@ export const useQuestionInfoStore = defineStore('questionInfo', () => {
     questionInfo.question_content[i] = content
     questionInfo.question_pic[i] = pic
 
-    let result: { [key: string]: string } = {};
-    let currentKey = "";
-    for (let j = 0; j < options.length; j++) {
-      if (j !== options.length - 1)  
-      {
-        if (options[j].match(/[A-Z]/) && options[j+1]===".") {
-          currentKey = options[j];
-          result[currentKey] = "";
-      } else if (options[j]!==".") {
-          result[currentKey] += options[j];
-      }
-      }
-      else {
-        result[currentKey] += options[j];
-      }
-    }
+    let result: { [key: string]: string } = parseOptions(options)
 
     questionInfo.question_options[i] = result
    
     questionInfo.question_answer[i] = answer
-    console.log(questionInfo.question_answer[i])
     questionInfo.quesion_get[i] = true
     questionInfo.question_multi[i] = mlt
     questionInfo.question_contain[i] = NUM

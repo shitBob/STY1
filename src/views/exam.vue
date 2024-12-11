@@ -190,7 +190,7 @@
       const onClickLeft = () => {
        
         router.push({name:'examshow',params:{id:memberStore.profile.id}})
-        
+        questionInfoStore.reset()
       }
       //console.log(questionInfoStore.questionInfo.question_content[Number(route.params.quesion_index)-1])
      

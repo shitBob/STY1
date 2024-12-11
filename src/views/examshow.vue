@@ -61,7 +61,7 @@ const start_exam = (index:any) => {
      
       questionInfoStore.setonequesion(i,res.data.data.exam_questionlist[i].questionScript,
         res.data.data.exam_questionlist[i].questionPicture,
-        res.data.data.exam_questionlist[i].option,
+        res.data.data.exam_questionlist[i].optionAl,
         res.data.data.exam_questionlist[i].canswer,
         res.data.data.exam_questionlist[i].flagMul,
         res.data.data.exam_questionlist[i].flagContain

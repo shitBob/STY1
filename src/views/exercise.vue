@@ -185,7 +185,7 @@
 
   const onClickLeft = () => {
     get_exercise_list()
-    //questionInfoStore.reset()
+    questionInfoStore.reset()
     router.push({name:'exerciseshow',params:{id:memberStore.profile.id}})
     
   }
@@ -238,20 +238,21 @@
         userid:memberStore.profile.id
     }).then((res:any)=>{
         if(res.data.code==200){
+          console.log(res.data.data)
           questionInfoStore.setonequesion(i-1,res.data.data.questionScript,
           res.data.data.questionPicture,
-          res.data.data.optionDescription,
+          res.data.data.optionAl,
           res.data.data.canswer,
           res.data.data.flagMul,
           res.data.data.flagContain,
         )
-
+          questionInfoStore.questionInfo.quesion_get[i-1]=true
         }
         else{
           alert("获取题目失败，请检查网络")
         }
     }).catch((err:any)=>{
-      alert("获取题目失败，请检查网络")
+      alert("获得题目失败，请检查网络")
     });
      
       
