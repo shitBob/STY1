@@ -27,6 +27,8 @@ export const useQuestionInfoStore = defineStore('questionInfo', () => {
     questionInfo.quesion_get = new Array(num).fill(false)
   }
   function parseOptions(optionStr:string) {
+  if (optionStr !== '' && optionStr!== undefined && optionStr!== null)
+  {
     const options: { [key: string]: string } = {};
     const lines = optionStr.split('\n');
     lines.forEach(line => {
@@ -35,6 +37,11 @@ export const useQuestionInfoStore = defineStore('questionInfo', () => {
         options[key] = value;
     });
     return options;
+  }
+  else {
+    return {A: '', B: '', C: '', D: ''};
+  }
+   
 }
   const setonequesion = (i: number, content: string,
      pic: string, 
@@ -63,6 +70,7 @@ export const useQuestionInfoStore = defineStore('questionInfo', () => {
     questionInfo.quesion_get = []
     questionInfo.question_mem_answer = []
   }
+  
   return {
     questionInfo,
     questionInfoInit,

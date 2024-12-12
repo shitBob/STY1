@@ -16,21 +16,27 @@
       </template>
   </van-nav-bar>
 
+ 
   <div style="overflow: auto;">
+    <template v-if="questionInfoStore.questionInfo.question_content[Number($route.params.quesion_index)-1]!==null">
   <text>{{questionInfoStore.questionInfo.question_content[Number($route.params.quesion_index)-1]}}</text>
-  
+</template>
+<template v-else>
+      <text>题干在图片中，请点击图片查看题目内容</text>
+    </template>
   
   <template v-if = "questionInfoStore.questionInfo.quesion_summit[Number($route.params.quesion_index)-1]==true">
   <van-icon name="success" size="40" color="green" v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]=== checked.join('')" />
   <van-icon name="cross" size="40"  color="red" v-else="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]!== checked.join('')" />
   </template>
   
-  <ul v-for="(value,key) in questionInfoStore.questionInfo.question_options[Number($route.params.quesion_index)-1]">
+
+  <ul v-if="questionInfoStore.questionInfo.question_content[Number($route.params.quesion_index)-1]!==null" v-for="(value,key) in questionInfoStore.questionInfo.question_options[Number($route.params.quesion_index)-1]">
   <li >{{key}}: {{value}}</li>
   </ul>
-
-  <van-divider>题目描述</van-divider>
   
+  <van-divider>题目描述</van-divider>
+
   <van-image :src="questionInfoStore.questionInfo.question_pic[Number($route.params.quesion_index)-1]" fit="scale-down" preview  @click="showImagePreview1"
     style="width: 80%;height: 200px;margin-bottom: 10px;" />
   <van-divider>图片演示，可以点击查看大图</van-divider>
@@ -96,15 +102,16 @@
   
   <template v-if="questionInfoStore.questionInfo.quesion_summit[Number($route.params.quesion_index)-1] && questionInfoStore.questionInfo.question_contain[Number($route.params.quesion_index)-1]==false" >
     正确答案：<span style="color: green;font-weight: bold;">{{questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]}}</span>  <br>
-    选择的答案：<span v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]=== checked.join('')" style="color: green;font-weight: bold;">{{checked.join('')}}</span>
-    <span v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]!== checked.join('')" style="color: red;font-weight: bold;">{{checked.join('')}}</span>  <br> 
+    选择的答案：<span v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]=== questionInfoStore.questionInfo.question_mem_answer[Number($route.params.quesion_index)-1]" style="color: green;font-weight: bold;">{{questionInfoStore.questionInfo.question_mem_answer[Number($route.params.quesion_index)-1]}}</span>
+    <span v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]!== questionInfoStore.questionInfo.question_mem_answer[Number($route.params.quesion_index)-1]" style="color: red;font-weight: bold;">{{questionInfoStore.questionInfo.question_mem_answer[Number($route.params.quesion_index)-1]}}</span>  <br> 
   
   </template>
   <template v-if="questionInfoStore.questionInfo.quesion_summit[Number($route.params.quesion_index)-1] && questionInfoStore.questionInfo.question_contain[Number($route.params.quesion_index)-1]==true" >
     正确答案：<span style="color: green;font-weight: bold;">{{questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]}}</span>  <br>
-    选择的答案：<span v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]=== questionInfoStore.questionInfo.question_mem_answer[Number($route.params.quesion_index)-1]" style="color: green;font-weight: bold;">
+    选择的答案：<span v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]=== questionInfoStore.questionInfo.question_mem_answer[Number($route.params.quesion_index)-1]"
+     style="color: green;font-weight: bold;">
       {{questionInfoStore.questionInfo.question_mem_answer[Number(route.params.quesion_index)-1]}}</span>
-    <span v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]!== checked.join('')" style="color: red;font-weight: bold;">
+    <span v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]!== questionInfoStore.questionInfo.question_mem_answer[Number($route.params.quesion_index)-1]" style="color: red;font-weight: bold;">
       {{questionInfoStore.questionInfo.question_mem_answer[Number(route.params.quesion_index)-1]}}</span>  <br> 
   </template>
   
@@ -196,8 +203,12 @@
   const currentPage = ref(1) ;
 
   const onChange = () => {
-   if (Number(route.params.quesion_index) < pagecount.value)
-      Getquesion(Number(route.params.quesion_index)+1);
+      Getquesion(currentPage.value);
+      console.log(currentPage.value);
+      checked.value=[];
+      checked_mul.value = [ ref([] as string[]), ref([] as string[]),
+      ref([] as string[]),
+      ref([] as string[]),ref([] as string[])]
       router.push({name: 'exercise',params: {id: memberStore.profile.id,
         profession: route.params.profession,
         list_index: route.params.list_index,
@@ -213,15 +224,8 @@
 
      }
 
-
-
-    if (questionInfoStore.questionInfo.quesion_summit[currentPage.value-1]==true)
-    {
-      checked.value=questionInfoStore.questionInfo.question_mem_answer[currentPage.value-1].split('')
-    }
-    else{
-      checked.value=[]
-    }
+     
+    
 
         
 
@@ -232,21 +236,33 @@
     if (questionInfoStore.questionInfo.quesion_get[i-1]==false){
 
       const res=instance.post("/question/send",{
-        questionList_index:Number(route.params.list_index),
-        questionindex:Number(route.params.quesion_index),  
-        profession:Number(route.params.profession),
-        userid:memberStore.profile.id
+        id:memberStore.profile.id,
+        listToQuestion:{questionList_index:Number(route.params.list_index),
+          questionindex:currentPage.value,  
+          profession:Number(route.params.profession)
+        }
+        
+        
     }).then((res:any)=>{
         if(res.data.code==200){
           console.log(res.data.data)
-          questionInfoStore.setonequesion(i-1,res.data.data.questionScript,
+          questionInfoStore.setonequesion(i-1,
+          res.data.data.questionScript,
           res.data.data.questionPicture,
           res.data.data.optionAl,
-          res.data.data.canswer,
+          res.data.data.c_answer,
           res.data.data.flagMul,
           res.data.data.flagContain,
         )
+
           questionInfoStore.questionInfo.quesion_get[i-1]=true
+          questionInfoStore.questionInfo.question_mem_answer[i-1]=res.data.data.s_answer
+         
+          if (res.data.data.s_answer!==null)
+        {
+          questionInfoStore.questionInfo.quesion_summit[i-1]=true
+          questionInfoStore.questionInfo.question_mem_answer[i-1]=res.data.data.s_answer
+        }
         }
         else{
           alert("获取题目失败，请检查网络")
@@ -270,15 +286,33 @@ const showImagePreview1 = () => {
 }
 
 const handin = () => {
-  questionInfoStore.questionInfo.quesion_summit[Number(route.params.quesion_index)-1]=true
   if(questionInfoStore.questionInfo.question_contain[Number(route.params.quesion_index)-1]==false)
 {
-  instance.post("/question/confrim",{
-      QuestionList_index:Number(route.params.list_index),
-      Questionindex:Number(route.params.quesion_index),  
-      profession:Number(route.params.profession),
-      userId:memberStore.profile.id,
-      sAnswer:checked.value.join("")
+  if (checked.value.length === 0) {
+    alert("请选择答案");
+    return;
+  }
+  }
+  else{
+    for (let i=1;i<=questionInfoStore.questionInfo.question_answer[Number(route.params.quesion_index)-1].length;i++){
+      if (checked_mul.value[i].value.length === 0)
+    {
+      alert("请为每个问题选择答案");
+      return;
+    }
+    }
+  }
+
+  questionInfoStore.questionInfo.quesion_summit[Number(route.params.quesion_index)-1]=true
+  questionInfoStore.questionInfo.question_mem_answer[Number(route.params.quesion_index)-1]="";
+  if(questionInfoStore.questionInfo.question_contain[Number(route.params.quesion_index)-1]==false)
+{
+  instance.post("/question/confirm",{
+    userId:memberStore.profile.id,
+    questionIndex:Number(route.params.quesion_index),  
+    questionListIndex:Number(route.params.list_index),
+    s_answer:checked.value.join(""),
+    profession:Number(route.params.profession),
   }).then((res:any)=>{
       if(res.data.code==200){
         questionInfoStore.questionInfo.quesion_summit[Number(route.params.quesion_index)-1]=true
@@ -289,30 +323,33 @@ const handin = () => {
         alert("提交失败，请检查网络")
       }
   }).catch((err:any)=>{
-    alert("提交失败，请检查网络")
+    alert("发生错误，提交失败，请检查网络和运行状况")
   });
 }
   else {
+    questionInfoStore.questionInfo.question_mem_answer[Number(route.params.quesion_index)-1]="";
     for (let i=1;i<=questionInfoStore.questionInfo.question_answer[Number(route.params.quesion_index)-1].length;i++){
-          questionInfoStore.questionInfo.question_mem_answer[Number(route.params.quesion_index)-1]+=checked_mul.value[i].value.join("")
+          questionInfoStore.questionInfo.question_mem_answer[Number(route.params.quesion_index)-1]+=checked_mul.value[i].value[0];
+          console.log("i:",i,"checked_mul.value[i].value[0]:",checked_mul.value[i].value[0])
         }
-    instance.post("/question/confrim",{
-      QuestionList_index:Number(route.params.list_index),
-      Questionindex:Number(route.params.quesion_index),  
+    instance.post("/question/confirm",{
+      questionListIndex:Number(route.params.list_index),
+      questionIndex:Number(route.params.quesion_index),  
       profession:Number(route.params.profession),
       userId:memberStore.profile.id,
-      sAnswer:questionInfoStore.questionInfo.question_mem_answer[Number(route.params.quesion_index)-1]
+      s_answer:questionInfoStore.questionInfo.question_mem_answer[Number(route.params.quesion_index)-1]
   }).then((res:any)=>{
       if(res.data.code==200){
         questionInfoStore.questionInfo.quesion_summit[Number(route.params.quesion_index)-1]=true
-        questionInfoStore.questionInfo.question_mem_answer[Number(route.params.quesion_index)-1]=checked.value.sort().join("")
+    
+        
 
       }
       else{
         alert("提交失败，请检查网络")
       }
   }).catch((err:any)=>{
-    alert("提交失败，请检查网络")
+    alert("提交失败，请检查网络和设备情况")
   });
   }
    
@@ -320,7 +357,7 @@ const handin = () => {
 
 questionInfoStore.questionInfoInit(Number(pagecount.value))
  Getquesion(1);
-
+ questionInfoStore.questionInfo.quesion_get[0]=true
   
 
 

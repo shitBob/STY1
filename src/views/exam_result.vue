@@ -44,8 +44,8 @@
           </p>
         </div>
         <div class="summary__cta">
-          <button class="btn btn__continue" @click="returnToHome()">返回
-        </button>
+          <van-button class="btn btn__continue" @click="returnToHome">返回
+        </van-button>
         </div>
       </div>
     </div>

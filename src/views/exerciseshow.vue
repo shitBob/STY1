@@ -5,7 +5,9 @@
   <van-collapse-item :title="num_to_profession(index+1)" :name="index+1" v-if="item!= 0 &&questionListStore.questionList.questionList_status[index]!=null">
    <template v-for="list_index in Math.ceil(item % 10 == 0? item/10 : item/10 )" >
     <van-cell-group inset>
-  <van-cell  value="内容"  is-link :to="{name: 'exercise',params: {id: memberStore.profile.id,profession: index+1,
+  <van-cell  value="内容"  is-link :to="{name: 'exercise',
+  params: {id: memberStore.profile.id,
+    profession: index,
     list_index: list_index,
     quesion_index:1,
     quesion_num:(item-(list_index-1)*10>=10? 10:item-(list_index-1)*10)}}">

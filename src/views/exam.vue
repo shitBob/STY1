@@ -28,21 +28,29 @@
   </template>
   </van-count-down>
    </template>
+  
     <div style="overflow: auto;">
+    <template v-if="questionInfoStore.questionInfo.question_content[Number($route.params.quesion_index)-1]!==null">
     <text>{{questionInfoStore.questionInfo.question_content[Number($route.params.quesion_index)-1]}}</text>
-    
+    </template>
+    <template v-else>
+      <text>题干在图片中，请点击图片查看题目内容</text>
+    </template>
     
     <template v-if = "questionInfoStore.questionInfo.quesion_summit[Number($route.params.quesion_index)-1]==true">
     <van-icon name="success" size="40" color="green" v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]=== checked.join('')" />
     <van-icon name="cross" size="40"  color="red" v-else="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]!== checked.join('')" />
     </template>
     
+    <template v-if="questionInfoStore.questionInfo.question_content[Number($route.params.quesion_index)-1]!==null">
     <ul v-for="(value,key) in questionInfoStore.questionInfo.question_options[Number($route.params.quesion_index)-1]">
     <li >{{key}}: {{value}}</li>
     </ul>
-
+    </template>
+ 
+ 
     <van-divider>题目描述</van-divider>
-    
+ 
     <van-image :src="questionInfoStore.questionInfo.question_pic[Number($route.params.quesion_index)-1]" fit="scale-down" preview  @click="showImagePreview1"
       style="width: 80%;height: 200px;margin-bottom: 10px;" />
     <van-divider>图片演示，可以点击查看大图</van-divider>
@@ -106,19 +114,21 @@
      
     
     
-    <template v-if="questionInfoStore.questionInfo.quesion_summit[Number($route.params.quesion_index)-1] && questionInfoStore.questionInfo.question_contain[Number($route.params.quesion_index)-1]==false" >
-      正确答案：<span style="color: green;font-weight: bold;">{{questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]}}</span>  <br>
-      选择的答案：<span v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]=== checked.join('')" style="color: green;font-weight: bold;">{{checked.join('')}}</span>
-      <span v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]!== checked.join('')" style="color: red;font-weight: bold;">{{checked.join('')}}</span>  <br> 
-    
-    </template>
-    <template v-if="questionInfoStore.questionInfo.quesion_summit[Number($route.params.quesion_index)-1] && questionInfoStore.questionInfo.question_contain[Number($route.params.quesion_index)-1]==true" >
-      正确答案：<span style="color: green;font-weight: bold;">{{questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]}}</span>  <br>
-      选择的答案：<span v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]=== questionInfoStore.questionInfo.question_mem_answer[Number($route.params.quesion_index)-1]" style="color: green;font-weight: bold;">
-        {{questionInfoStore.questionInfo.question_mem_answer[Number(route.params.quesion_index)-1]}}</span>
-      <span v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]!== checked.join('')" style="color: red;font-weight: bold;">
-        {{questionInfoStore.questionInfo.question_mem_answer[Number(route.params.quesion_index)-1]}}</span>  <br> 
-    </template>
+     <template v-if="questionInfoStore.questionInfo.quesion_summit[Number($route.params.quesion_index)-1] && questionInfoStore.questionInfo.question_contain[Number($route.params.quesion_index)-1]==false" >
+    正确答案：<span style="color: green;font-weight: bold;">{{questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]}}</span>  <br>
+    选择的答案：<span v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]=== questionInfoStore.questionInfo.question_mem_answer[Number($route.params.quesion_index)-1]" style="color: green;font-weight: bold;">{{questionInfoStore.questionInfo.question_mem_answer[Number($route.params.quesion_index)-1]}}</span>
+    <span v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]!== questionInfoStore.questionInfo.question_mem_answer[Number($route.params.quesion_index)-1]" style="color: red;font-weight: bold;">{{questionInfoStore.questionInfo.question_mem_answer[Number($route.params.quesion_index)-1]}}</span>  <br> 
+  
+  </template>
+  <template v-if="questionInfoStore.questionInfo.quesion_summit[Number($route.params.quesion_index)-1] && questionInfoStore.questionInfo.question_contain[Number($route.params.quesion_index)-1]==true" >
+    正确答案：<span style="color: green;font-weight: bold;">{{questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]}}</span>  <br>
+    选择的答案：<span v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]=== questionInfoStore.questionInfo.question_mem_answer[Number($route.params.quesion_index)-1]"
+     style="color: green;font-weight: bold;">
+      {{questionInfoStore.questionInfo.question_mem_answer[Number(route.params.quesion_index)-1]}}</span>
+    <span v-if="questionInfoStore.questionInfo.question_answer[Number($route.params.quesion_index)-1]!== questionInfoStore.questionInfo.question_mem_answer[Number($route.params.quesion_index)-1]" style="color: red;font-weight: bold;">
+      {{questionInfoStore.questionInfo.question_mem_answer[Number(route.params.quesion_index)-1]}}</span>  <br> 
+  </template>
+  
     
     
     <van-button v-if="questionInfoStore.questionInfo.quesion_summit[Number($route.params.quesion_index)-1]==false" 
@@ -199,7 +209,10 @@
       const currentPage = ref(1) ;
     
       const onChange = () => {
-       
+        checked_mul.value=[ ref([] as string[]), ref([] as string[]),
+      ref([] as string[]),
+      ref([] as string[]),ref([] as string[])] 
+      checked.value=[]
           router.push({name: 'exam',params: {id: memberStore.profile.id,
             profession: route.params.profession,
             exam_id: route.params. exam_id,
@@ -237,7 +250,22 @@
     }
     
     const handin = () =>
-     {
+     {  if(questionInfoStore.questionInfo.question_contain[Number(route.params.quesion_index)-1]==false)
+{
+  if (checked.value.length === 0) {
+    alert("请选择答案");
+    return;
+  }
+  }
+  else{
+    for (let i=1;i<=questionInfoStore.questionInfo.question_answer[Number(route.params.quesion_index)-1].length;i++){
+      if (checked_mul.value[i].value.length === 0)
+    {
+      alert("请为每个问题选择答案");
+      return;
+    }
+    }
+  }
       questionInfoStore.questionInfo.quesion_summit[Number(route.params.quesion_index)-1]=true
       if(questionInfoStore.questionInfo.question_contain[Number(route.params.quesion_index)-1]==false)
       questionInfoStore.questionInfo.question_mem_answer[Number(route.params.quesion_index)-1]=checked.value.sort().join("")
